@@ -30,6 +30,7 @@ pip install -r requirements.txt
 cp .env.example .env
 # Configurar DATABASE_URL de Neon
 python -m app.db_init
+python seed.py              # Carga datos demo (5 fuentes, 30 días de métricas)
 python -m flask --app app.main run --debug
 ```
 
@@ -39,3 +40,14 @@ python -m flask --app app.main run --debug
 python -m etl.scraper     # Extrae datos de fuente configurada
 python -m etl.loader      # Carga datos limpios a PostgreSQL
 ```
+
+## API Endpoints
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/sources` | Lista fuentes de datos |
+| POST | `/api/sources` | Crea nueva fuente |
+| GET | `/api/metrics?source_id=&metric=&limit=` | Consulta métricas |
+| POST | `/api/metrics` | Registra nueva métrica |
+| GET | `/api/metrics/summary` | Resumen estadístico por métrica |
+| GET | `/api/export/csv` | Exporta métricas a CSV |
