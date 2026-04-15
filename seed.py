@@ -34,11 +34,11 @@ print(f"Created {len(demo_users)} demo users.")
 
 # Sources
 sources = [
-    ("Ventas Online", "etl", "https://tienda.example.com/api/stats"),
-    ("Soporte Técnico", "manual", None),
-    ("Marketing Digital", "etl", "https://analytics.example.com/export"),
-    ("Operaciones", "manual", None),
-    ("Recursos Humanos", "manual", None),
+    ("NovaTech Tienda", "etl", "https://smb-commerce-platform.vercel.app/api/products"),
+    ("NovaTech Inventario", "etl", "https://retail-inventory-platform-gamma.vercel.app/api/products"),
+    ("NovaTech Docs", "etl", "https://saas-auth-service.vercel.app/api/documents"),
+    ("NovaTech Ops", "etl", "https://realtime-ops-dashboard.vercel.app/api/metrics"),
+    ("Equipo NovaTech", "manual", None),
 ]
 
 source_ids = {}
@@ -59,33 +59,33 @@ print(f"Inserted {len(sources)} sources.")
 # Metrics — generate 30 days of data
 today = date.today()
 metrics_config = {
-    "Ventas Online": [
-        ("Ingresos Diarios", 8000, 25000, "MXN"),
-        ("Pedidos", 15, 80, "count"),
-        ("Ticket Promedio", 200, 600, "MXN"),
+    "NovaTech Tienda": [
+        ("Ingresos Diarios", 800, 3500, "Bs."),
+        ("Pedidos", 5, 40, "count"),
+        ("Ticket Promedio", 80, 250, "Bs."),
         ("Tasa de Conversión", 1.5, 5.0, "%"),
     ],
-    "Soporte Técnico": [
-        ("Tickets Abiertos", 5, 40, "count"),
-        ("Tickets Resueltos", 5, 35, "count"),
-        ("Tiempo Medio de Resolución", 0.5, 8.0, "horas"),
-        ("Satisfacción del Cliente", 60, 98, "%"),
+    "NovaTech Inventario": [
+        ("Productos en Stock", 120, 200, "count"),
+        ("Movimientos Diarios", 10, 60, "count"),
+        ("Productos Bajo Stock", 0, 15, "count"),
+        ("Valor del Inventario", 15000, 45000, "Bs."),
     ],
-    "Marketing Digital": [
-        ("Visitantes Únicos", 500, 5000, "count"),
-        ("Tasa de Rebote", 25, 65, "%"),
-        ("CTR Campañas", 1.0, 8.5, "%"),
-        ("Costo por Adquisición", 50, 300, "MXN"),
+    "NovaTech Docs": [
+        ("Documentos Creados", 2, 20, "count"),
+        ("Usuarios Activos", 3, 15, "count"),
+        ("Sesiones Diarias", 5, 30, "count"),
+        ("Documentos Totales", 50, 200, "count"),
     ],
-    "Operaciones": [
+    "NovaTech Ops": [
         ("Uptime del Sistema", 95.0, 99.99, "%"),
         ("Tiempo de Respuesta API", 80, 500, "ms"),
-        ("Errores 5xx", 0, 15, "count"),
+        ("Errores 5xx", 0, 10, "count"),
     ],
-    "Recursos Humanos": [
-        ("Empleados Activos", 45, 55, "count"),
-        ("Tasa de Rotación", 1.0, 8.0, "%"),
-        ("NPS Empleados", 30, 85, "pts"),
+    "Equipo NovaTech": [
+        ("Empleados Activos", 5, 12, "count"),
+        ("Tareas Completadas", 8, 35, "count"),
+        ("NPS Equipo", 60, 95, "pts"),
     ],
 }
 

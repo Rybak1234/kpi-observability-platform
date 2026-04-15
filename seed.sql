@@ -23,57 +23,57 @@ CREATE INDEX IF NOT EXISTS idx_metrics_name ON kpi_metrics(metric_name);
 
 -- Seed sources
 INSERT INTO kpi_sources (name, source_type, url) VALUES
-  ('Ventas Online', 'etl', 'https://tienda.example.com/api/stats'),
-  ('Soporte Técnico', 'manual', NULL),
-  ('Marketing Digital', 'etl', 'https://analytics.example.com/export'),
-  ('Operaciones', 'manual', NULL),
-  ('Recursos Humanos', 'manual', NULL);
+  ('NovaTech Tienda', 'etl', 'https://smb-commerce-platform.vercel.app/api/products'),
+  ('NovaTech Inventario', 'etl', 'https://retail-inventory-platform-gamma.vercel.app/api/products'),
+  ('NovaTech Docs', 'etl', 'https://saas-auth-service.vercel.app/api/documents'),
+  ('NovaTech Ops', 'etl', 'https://realtime-ops-dashboard.vercel.app/api/metrics'),
+  ('Equipo NovaTech', 'manual', NULL);
 
--- Seed metrics (sample data for 10 days)
+-- Seed metrics (sample data for 30 days)
 DO $$
 DECLARE
-  s_ventas INT;
-  s_soporte INT;
-  s_marketing INT;
+  s_tienda INT;
+  s_inventario INT;
+  s_docs INT;
   s_ops INT;
-  s_rrhh INT;
+  s_equipo INT;
   d DATE;
 BEGIN
-  SELECT id INTO s_ventas FROM kpi_sources WHERE name = 'Ventas Online';
-  SELECT id INTO s_soporte FROM kpi_sources WHERE name = 'Soporte Técnico';
-  SELECT id INTO s_marketing FROM kpi_sources WHERE name = 'Marketing Digital';
-  SELECT id INTO s_ops FROM kpi_sources WHERE name = 'Operaciones';
-  SELECT id INTO s_rrhh FROM kpi_sources WHERE name = 'Recursos Humanos';
+  SELECT id INTO s_tienda FROM kpi_sources WHERE name = 'NovaTech Tienda';
+  SELECT id INTO s_inventario FROM kpi_sources WHERE name = 'NovaTech Inventario';
+  SELECT id INTO s_docs FROM kpi_sources WHERE name = 'NovaTech Docs';
+  SELECT id INTO s_ops FROM kpi_sources WHERE name = 'NovaTech Ops';
+  SELECT id INTO s_equipo FROM kpi_sources WHERE name = 'Equipo NovaTech';
 
   FOR i IN 0..29 LOOP
     d := CURRENT_DATE - (29 - i);
-    -- Ventas
+    -- Tienda
     INSERT INTO kpi_metrics (source_id, metric_name, metric_value, unit, period_date) VALUES
-      (s_ventas, 'Ingresos Diarios', round((random() * 17000 + 8000)::numeric, 2), 'MXN', d),
-      (s_ventas, 'Pedidos', round((random() * 65 + 15)::numeric, 0), 'count', d),
-      (s_ventas, 'Ticket Promedio', round((random() * 400 + 200)::numeric, 2), 'MXN', d),
-      (s_ventas, 'Tasa de Conversión', round((random() * 3.5 + 1.5)::numeric, 2), '%', d);
-    -- Soporte
+      (s_tienda, 'Ingresos Diarios', round((random() * 2700 + 800)::numeric, 2), 'Bs.', d),
+      (s_tienda, 'Pedidos', round((random() * 35 + 5)::numeric, 0), 'count', d),
+      (s_tienda, 'Ticket Promedio', round((random() * 170 + 80)::numeric, 2), 'Bs.', d),
+      (s_tienda, 'Tasa de Conversión', round((random() * 3.5 + 1.5)::numeric, 2), '%', d);
+    -- Inventario
     INSERT INTO kpi_metrics (source_id, metric_name, metric_value, unit, period_date) VALUES
-      (s_soporte, 'Tickets Abiertos', round((random() * 35 + 5)::numeric, 0), 'count', d),
-      (s_soporte, 'Tickets Resueltos', round((random() * 30 + 5)::numeric, 0), 'count', d),
-      (s_soporte, 'Tiempo Medio de Resolución', round((random() * 7.5 + 0.5)::numeric, 2), 'horas', d),
-      (s_soporte, 'Satisfacción del Cliente', round((random() * 38 + 60)::numeric, 1), '%', d);
-    -- Marketing
+      (s_inventario, 'Productos en Stock', round((random() * 80 + 120)::numeric, 0), 'count', d),
+      (s_inventario, 'Movimientos Diarios', round((random() * 50 + 10)::numeric, 0), 'count', d),
+      (s_inventario, 'Productos Bajo Stock', round((random() * 15)::numeric, 0), 'count', d),
+      (s_inventario, 'Valor del Inventario', round((random() * 30000 + 15000)::numeric, 2), 'Bs.', d);
+    -- Docs
     INSERT INTO kpi_metrics (source_id, metric_name, metric_value, unit, period_date) VALUES
-      (s_marketing, 'Visitantes Únicos', round((random() * 4500 + 500)::numeric, 0), 'count', d),
-      (s_marketing, 'Tasa de Rebote', round((random() * 40 + 25)::numeric, 1), '%', d),
-      (s_marketing, 'CTR Campañas', round((random() * 7.5 + 1.0)::numeric, 2), '%', d),
-      (s_marketing, 'Costo por Adquisición', round((random() * 250 + 50)::numeric, 2), 'MXN', d);
-    -- Operaciones
+      (s_docs, 'Documentos Creados', round((random() * 18 + 2)::numeric, 0), 'count', d),
+      (s_docs, 'Usuarios Activos', round((random() * 12 + 3)::numeric, 0), 'count', d),
+      (s_docs, 'Sesiones Diarias', round((random() * 25 + 5)::numeric, 0), 'count', d),
+      (s_docs, 'Documentos Totales', round((random() * 150 + 50)::numeric, 0), 'count', d);
+    -- Ops
     INSERT INTO kpi_metrics (source_id, metric_name, metric_value, unit, period_date) VALUES
       (s_ops, 'Uptime del Sistema', round((random() * 4.99 + 95)::numeric, 2), '%', d),
       (s_ops, 'Tiempo de Respuesta API', round((random() * 420 + 80)::numeric, 0), 'ms', d),
-      (s_ops, 'Errores 5xx', round((random() * 15)::numeric, 0), 'count', d);
-    -- RRHH
+      (s_ops, 'Errores 5xx', round((random() * 10)::numeric, 0), 'count', d);
+    -- Equipo
     INSERT INTO kpi_metrics (source_id, metric_name, metric_value, unit, period_date) VALUES
-      (s_rrhh, 'Empleados Activos', round((random() * 10 + 45)::numeric, 0), 'count', d),
-      (s_rrhh, 'Tasa de Rotación', round((random() * 7 + 1)::numeric, 1), '%', d),
-      (s_rrhh, 'NPS Empleados', round((random() * 55 + 30)::numeric, 0), 'pts', d);
+      (s_equipo, 'Empleados Activos', round((random() * 7 + 5)::numeric, 0), 'count', d),
+      (s_equipo, 'Tareas Completadas', round((random() * 27 + 8)::numeric, 0), 'count', d),
+      (s_equipo, 'NPS Equipo', round((random() * 35 + 60)::numeric, 0), 'pts', d);
   END LOOP;
 END $$;
