@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Metrics Browser - KPI Observatory{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">⚙ Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/users" class="sidebar-link">👥 Users</a>
+      <a href="/admin/sources" class="sidebar-link">🔗 Sources</a>
+      <a href="/admin/metrics" class="sidebar-link active">📈 Metrics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="sidebar-link">← Back to App</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <div class="page-header">
+      <h1>Metrics Browser</h1>
+      <span class="badge">{{ metrics|length }} results</span>
+    </div>
+
+    <div class="admin-card">
+      <h3>Filter</h3>
+      <form method="GET" action="/admin/metrics" class="inline-form">
+        <select name="source_id" class="form-input">
+          <option value="">All Sources</option>
+          {% for s in sources %}
+          <option value="{{ s.id }}" {{ 'selected' if selected_source == s.id|string }}>{{ s.name }}</option>
+          {% endfor %}
+        </select>
+        <select name="metric_name" class="form-input">
+          <option value="">All Metrics</option>
+          {% for m in metric_names %}
+          <option value="{{ m.metric_name }}" {{ 'selected' if selected_metric == m.metric_name }}>{{ m.metric_name }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn-add">🔍 Filter</button>
+        <a href="/admin/metrics" class="btn-clear">Clear</a>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Unit</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in metrics %}
+          <tr>
+            <td>{{ m.source_name }}</td>
+            <td>{{ m.metric_name }}</td>
+            <td class="val">{{ m.metric_value }}</td>
+            <td>{{ m.unit }}</td>
+            <td>{{ m.period_date }}</td>
+          </tr>
+          {% endfor %}
+          {% if not metrics %}
+          <tr><td colspan="5" class="empty">No metrics found</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - KPI Observatory{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">⚙ Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link active">📊 Dashboard</a>
+      <a href="/admin/users" class="sidebar-link">👥 Users</a>
+      <a href="/admin/sources" class="sidebar-link">🔗 Sources</a>
+      <a href="/admin/metrics" class="sidebar-link">📈 Metrics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="sidebar-link">← Back to App</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <h1>Admin Dashboard</h1>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-value">{{ total_users }}</div>
+        <div class="kpi-label">Users</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🔗</div>
+        <div class="kpi-value">{{ total_sources }}</div>
+        <div class="kpi-label">Data Sources</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-value">{{ total_metrics }}</div>
+        <div class="kpi-label">Metric Records</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📊</div>
+        <div class="kpi-value">{{ total_kpis }}</div>
+        <div class="kpi-label">Unique KPIs</div>
+      </div>
+    </div>
+
+    <div class="admin-grid-2">
+      <div class="admin-card">
+        <h3>Metrics by Source</h3>
+        <div class="bar-chart">
+          {% for item in metrics_by_source %}
+          <div class="bar-row">
+            <span class="bar-label">{{ item.name }}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: {{ (item.cnt / (metrics_by_source[0].cnt if metrics_by_source else 1)) * 100 }}%"></div>
+            </div>
+            <span class="bar-value">{{ item.cnt }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="admin-card">
+        <h3>KPI Summary</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Metric</th><th>Avg</th><th>Max</th><th>Min</th><th>Points</th></tr>
+          </thead>
+          <tbody>
+            {% for s in summary[:8] %}
+            <tr>
+              <td>{{ s.metric_name }}</td>
+              <td class="val">{{ s.avg_val }}</td>
+              <td>{{ s.max_val }}</td>
+              <td>{{ s.min_val }}</td>
+              <td>{{ s.data_points }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>Recent Metrics</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Source</th><th>Metric</th><th>Value</th><th>Unit</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          {% for m in recent_metrics %}
+          <tr>
+            <td>{{ m.source_name }}</td>
+            <td>{{ m.metric_name }}</td>
+            <td class="val">{{ m.metric_value }}</td>
+            <td>{{ m.unit }}</td>
+            <td>{{ m.period_date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

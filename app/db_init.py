@@ -2,6 +2,16 @@
 from app.db import execute
 
 SCHEMA = """
+CREATE TABLE IF NOT EXISTS kpi_users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role VARCHAR(20) DEFAULT 'viewer',
+    created_at TIMESTAMP DEFAULT NOW(),
+    last_login TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS kpi_sources (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

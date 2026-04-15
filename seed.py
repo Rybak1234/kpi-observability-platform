@@ -4,6 +4,7 @@ Usage: python seed.py
 """
 import random
 from datetime import date, timedelta
+from werkzeug.security import generate_password_hash
 from app.db import execute, query
 from app.db_init import SCHEMA
 
@@ -14,6 +15,22 @@ for statement in SCHEMA.strip().split(";"):
         execute(stmt + ";")
 
 print("Tables created.")
+
+# Users
+demo_users = [
+    ("Administrador", "admin@kpiplatform.com", "admin123", "admin"),
+    ("Editor KPI", "editor@kpiplatform.com", "editor123", "editor"),
+    ("Viewer Demo", "viewer@kpiplatform.com", "viewer123", "viewer"),
+]
+for name, email, password, role in demo_users:
+    existing = query("SELECT id FROM kpi_users WHERE email = %s", (email,))
+    if not existing:
+        pw_hash = generate_password_hash(password)
+        execute(
+            "INSERT INTO kpi_users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
+            (name, email, pw_hash, role),
+        )
+print(f"Created {len(demo_users)} demo users.")
 
 # Sources
 sources = [

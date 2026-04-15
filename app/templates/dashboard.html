@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KPI Observability Platform</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-  <nav class="navbar">
-    <span class="logo">📊 KPI Observatory</span>
-    <div class="nav-actions">
-      <a href="/api/export/csv" class="btn-export">📥 Exportar CSV</a>
-    </div>
-  </nav>
-
+{% extends "base.html" %}
+{% block title %}Dashboard - KPI Observatory{% endblock %}
+{% block content %}
   <main class="container">
     <h1>Dashboard de Indicadores</h1>
 
@@ -81,5 +68,4 @@
       </table>
     </section>
   </main>
-</body>
-</html>
+{% endblock %}

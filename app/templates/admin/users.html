@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}User Management - KPI Observatory{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">⚙ Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/users" class="sidebar-link active">👥 Users</a>
+      <a href="/admin/sources" class="sidebar-link">🔗 Sources</a>
+      <a href="/admin/metrics" class="sidebar-link">📈 Metrics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="sidebar-link">← Back to App</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <div class="page-header">
+      <h1>User Management</h1>
+      <span class="badge">{{ users|length }} users</span>
+    </div>
+    <div class="admin-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td><strong>{{ user.name }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td>
+              <form method="POST" action="/admin/users/{{ user.id }}/role" style="display:inline">
+                <select name="role" onchange="this.form.submit()" class="role-select">
+                  <option value="admin" {{ 'selected' if user.role == 'admin' }}>Admin</option>
+                  <option value="editor" {{ 'selected' if user.role == 'editor' }}>Editor</option>
+                  <option value="viewer" {{ 'selected' if user.role == 'viewer' }}>Viewer</option>
+                </select>
+              </form>
+            </td>
+            <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at else '-' }}</td>
+            <td>{{ user.last_login.strftime('%b %d, %Y %H:%M') if user.last_login else 'Never' }}</td>
+            <td>
+              <form method="POST" action="/admin/users/{{ user.id }}/delete" style="display:inline" onsubmit="return confirm('Delete this user?')">
+                <button type="submit" class="btn-delete">🗑</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

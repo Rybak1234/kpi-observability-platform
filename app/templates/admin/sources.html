@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Data Sources - KPI Observatory{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">⚙ Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="/admin" class="sidebar-link">📊 Dashboard</a>
+      <a href="/admin/users" class="sidebar-link">👥 Users</a>
+      <a href="/admin/sources" class="sidebar-link active">🔗 Sources</a>
+      <a href="/admin/metrics" class="sidebar-link">📈 Metrics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" class="sidebar-link">← Back to App</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    <div class="page-header">
+      <h1>Data Sources</h1>
+      <span class="badge">{{ sources|length }} sources</span>
+    </div>
+
+    <div class="admin-card">
+      <h3>Add New Source</h3>
+      <form method="POST" action="/admin/sources/add" class="inline-form">
+        <input type="text" name="name" placeholder="Source name" required class="form-input">
+        <select name="source_type" class="form-input">
+          <option value="manual">Manual</option>
+          <option value="etl">ETL</option>
+          <option value="api">API</option>
+        </select>
+        <input type="url" name="url" placeholder="URL (optional)" class="form-input">
+        <button type="submit" class="btn-add">+ Add Source</button>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>URL</th>
+            <th>Metrics</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for src in sources %}
+          <tr>
+            <td><strong>{{ src.name }}</strong></td>
+            <td><span class="type-badge type-{{ src.source_type }}">{{ src.source_type }}</span></td>
+            <td>{{ src.url or '-' }}</td>
+            <td class="val">{{ src.metric_count }}</td>
+            <td>{{ src.created_at.strftime('%b %d, %Y') if src.created_at else '-' }}</td>
+            <td>
+              <form method="POST" action="/admin/sources/{{ src.id }}/delete" style="display:inline" onsubmit="return confirm('Delete source and all its metrics?')">
+                <button type="submit" class="btn-delete">🗑</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}
